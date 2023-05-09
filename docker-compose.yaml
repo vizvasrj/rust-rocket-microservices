@@ -63,19 +63,19 @@ services:
       sleep 10 && kafka-topics --create --topic quickstart --bootstrap-server localhost:9092 --if-not-exists --partitions 1 --replication-factor 1 &&
       wait"
 
-  # master-server:
-  #   build: ./master-server
-  #   environment:
-  #     - KAFKA_HOST=kafka:9092
-  #   # ports:
-  #   #   - '8000:8000'
-  #   depends_on:
-  #     - kafka
-  #     # - postgres
-  #   # network_mode: service:kafka
-  #   networks:
-  #     - my-network
-  #   restart: unless-stopped
+  master-server:
+    build: ./master-server
+    environment:
+      - KAFKA_HOST=kafka:9092
+    ports:
+      - '8000:8000'
+    depends_on:
+      - kafka
+      - postgres
+    # network_mode: service:kafka
+    networks:
+      - my-network
+    restart: unless-stopped
 
 
   # email-microservice:
