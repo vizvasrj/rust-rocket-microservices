@@ -1,0 +1,119 @@
+version: '3'
+services:
+  redis:
+    image: redis:alpine
+    ports:
+      - '6378:6379'
+    volumes:
+      - rust_redis_volume:/data
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=somedb0001
+    volumes:
+      - rust_postgres_volume:/var/lib/postgresql/data
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+    ports:
+      - '2181:2181'
+    networks:
+      - my-network
+    volumes:
+      - zookeeper_data:/var/lib/zookeeper/data
+      - zookeeper_logs:/var/lib/zookeeper/logs
+
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - '9092:9092'
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+      - KAFKA_TRANSACTION_STATE_LOG_MIN_ISR=1
+      - KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR=1
+      - KAFKA_LISTENERS=INTERNAL://0.0.0.0:9092,OUTSIDE://0.0.0.0:9094
+      - KAFKA_ADVERTISED_LISTENERS=INTERNAL://kafka:9092,OUTSIDE://localhost:9094
+      - KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,OUTSIDE:PLAINTEXT
+      - KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL
+      - KAFKA_AUTO_CREATE_TOPICS_ENABLE=true
+    depends_on:
+      - zookeeper
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - kafka_data:/var/lib/kafka/data      
+    networks:
+      - my-network
+    command: >
+      sh -c "
+      /etc/confluent/docker/run &
+      sleep 10 && kafka-topics --create --topic quickstart --bootstrap-server localhost:9092 --if-not-exists --partitions 1 --replication-factor 1 &&
+      wait"
+
+  # master-server:
+  #   build: ./master-server
+  #   environment:
+  #     - KAFKA_HOST=kafka:9092
+  #   # ports:
+  #   #   - '8000:8000'
+  #   depends_on:
+  #     - kafka
+  #     # - postgres
+  #   # network_mode: service:kafka
+  #   networks:
+  #     - my-network
+  #   restart: unless-stopped
+
+
+  # email-microservice:
+  #   build: ./email-microservice
+  #   depends_on:
+  #     - kafka
+
+  # translation-microservice:
+  #   build: ./translation-microservice
+  #   depends_on:
+  #     - kafka
+
+  # save-to-postgres:
+  #   build: ./save-to-postgres
+  #   depends_on:
+  #     - kafka
+  #     - postgres
+  #   environment:
+  #     - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+  #     - POSTGRES_HOST=postgres
+  #     - POSTGRES_PORT=5432
+  #     - POSTGRES_USER=postgres
+  #     - POSTGRES_PASSWORD=postgres
+  #     - POSTGRES_DB=somedb0001
+
+
+volumes:
+  zookeeper_data:
+    external: true
+  zookeeper_logs:
+    external: true
+  # kafka_data:
+  #   external: true
+  rust_redis_volume:
+    external: true
+  rust_postgres_volume:
+    external: true
+
+networks:
+  my-network:
+  
