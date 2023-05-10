@@ -83,10 +83,10 @@ services:
   #   depends_on:
   #     - kafka
 
-  # translation-microservice:
-  #   build: ./translation-microservice
-  #   depends_on:
-  #     - kafka
+  translation-microservice:
+    build: ./translation-microservice
+    depends_on:
+      - kafka
 
   # save-to-postgres:
   #   build: ./save-to-postgres
