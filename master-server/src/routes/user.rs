@@ -1,11 +1,11 @@
-use crate::{fairings::db::DBConnection, models::user::{NewUser, LoginUser}, errors::OurError, guards::jwt_header::ApiUser, jwt::token::Token};
+use crate::{fairings::db::DBConnection, models::user::{NewUser, LoginUser}, errors::OurError, guards::jwt_header::ApiUser};
 use rocket::{serde::json::Json, State};
-use sqlx::PgConnection;
+// use sqlx::PgConnection;
 use crate::models::user::User;
 use rocket_db_pools::{sqlx::Acquire, Connection};
 use crate::states::JWToken;
-use crate::models::user_status::UserStatus;
-use uuid::Uuid;
+// use crate::models::user_status::UserStatus;
+// use uuid::Uuid;
 
 #[post(
     "/users",

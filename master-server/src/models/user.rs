@@ -1,23 +1,25 @@
-use std::collections::BTreeMap;
+// use std::collections::BTreeMap;
 
 use argon2::{password_hash::SaltString, Argon2, PasswordHasher};
-use jwt::SignWithKey;
+// use jwt::SignWithKey;
 use rand_core::OsRng;
 use serde::{Serialize, Deserialize};
 use sqlx::types::Uuid;
-use tokio::sync::futures;
+// use tokio::sync::futures;
 use zxcvbn::zxcvbn;
-use crate::{errors::OurError, states::JWToken, jwt::token::Token};
+use crate::{errors::OurError,
+    //  states::JWToken,
+      jwt::token::Token};
 // use rocket::serde::json::Json;
 // use rocket::serde;
 use super::user_status::UserStatus;
 use rocket_db_pools::sqlx::PgConnection;
-use jwt_simple::prelude::*;
+// use jwt_simple::prelude::*;
 
-use rocket::form::{self, Error as FormError};
+// use rocket::form::{self, Error as FormError};
 use regex::Regex;
-use hmac::{Hmac, Mac};
-use sha2::Sha256;
+// use hmac::{Hmac, Mac};
+// use sha2::Sha256;
 use sqlx::FromRow;
 use argon2::PasswordHash;
 use argon2::PasswordVerifier;

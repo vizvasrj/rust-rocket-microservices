@@ -5,9 +5,9 @@ use crate::{models::user::User, fairings::db::DBConnection, jwt::token::Token, s
 use serde::Serialize;
 use rocket::http::Status;
 use rocket_db_pools::{sqlx::Acquire, Connection};
-use sqlx::PgPool;
-use rocket_db_pools::sqlx::Postgres;
-use sqlx::pool::PoolConnection;
+// use sqlx::PgPool;
+// use rocket_db_pools::sqlx::Postgres;
+// use sqlx::pool::PoolConnection;
 
 #[derive(Serialize, Debug)]
 pub struct ApiUser {

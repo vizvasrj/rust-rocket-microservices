@@ -1,4 +1,6 @@
-use sqlx::{FromRow, PgConnection, Error::RowNotFound};
+use sqlx::{FromRow, PgConnection,
+    //  Error::RowNotFound
+    };
 use uuid::Uuid;
 use chrono::DateTime;
 use serde::{

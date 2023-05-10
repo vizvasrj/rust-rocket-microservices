@@ -1,36 +1,40 @@
 #[macro_use]
 extern crate rocket;
-use std::panic;
+// use std::panic;
 
-use rocket::fairing::AdHoc;
-use rocket::figment::Figment;
-use rocket::figment::providers::{Format, Env};
-use rocket::{Build, Rocket, State};
+// use rocket::fairing::AdHoc;
+// use rocket::figment::Figment;
+// use rocket::figment::providers::{Format, Env};
+use rocket::{Build, Rocket, 
+    // State
+};
 use rocket::serde::json::Json;
 use rocket_db_pools::Database;
-use rocket_db_pools::sqlx::postgres::PgPoolOptions;
+// use rocket_db_pools::sqlx::postgres::PgPoolOptions;
 use master_server::errors::OurError;
 use rocket::serde::{Serialize, Deserialize};
 use master_server::fairings::db::DBConnection;
 use master_server::states::JWToken;
 use dotenv;
-use sqlx::PgPool;
+// use sqlx::PgPool;
 use master_server::routes::{blog, user};
 // use figment::{Figment, providers::{Env}};
 
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 struct Config {
     database: Databases,
     secret_key: String,
 }
 
-
+#[allow(dead_code)]
 #[derive(Deserialize)]
 struct Databases {
     main_connection: MainConection,
 }
 
+#[allow(dead_code)]
 #[derive(Deserialize)]
 struct MainConection{
     url: String,
@@ -69,7 +73,7 @@ async fn rocket() -> Rocket<Build> {
 
     // let secret = std::env::var("SECRET_KEY").unwrap();
     
-    let warn = "";
+    // let warn = "";
     
     // let fairing = AdHoc::on_ignite("database",move |r| async {
     //     let db_user = std::env::var("POSTGRES_USER").unwrap();
@@ -95,9 +99,9 @@ async fn rocket() -> Rocket<Build> {
                 hello_world,
                 user::create_user,
                 user::get_user_by_uuid,
-                // user::get_user_by_token,
+                user::get_user_by_token,
                 user::login,
-                // blog::create_new_blog,
+                blog::create_new_blog,
 
                 ]
             );
